@@ -72,6 +72,9 @@ stages:
               destinationFolder: '$(System.DefaultWorkingDirectory)'
               cleanDestinationFolder: false
             enabled: true
+          - task: FuncToolsInstaller@0
+            displayName: 'Install func tools - latest'
+            enabled: true
 
           - script: 'func azure functionapp publish f-python-consumption --build remote --nozip'
             workingDirectory: '$(System.DefaultWorkingDirectory)'
