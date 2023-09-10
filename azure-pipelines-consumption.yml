@@ -50,33 +50,34 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-  condition: succeeded()
+    - task: AzureCLI@2
+      displayName: 'Azure CLI '
+      inputs:
+        azureSubscription: 'KevinLi-Internal(ed5ebdf4-3f16-4970-8666-b0b3803c727e)'
+        scriptType: pscore
+        scriptLocation: inlineScript
+        inlineScript: 'az functionapp deployment source config-zip     -g AML -n  f-consumption --src $(Build.BuildId).zip --build-remote true  --verbose'
 
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: 'development'
-    pool:
-      vmImage: $(vmImageName)
+# - stage: Deploy
+#   displayName: Deploy stage
+#   dependsOn: Build
+#   condition: succeeded()
 
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: ExtractFiles@1
-            displayName: 'Extract files '
-            inputs:
-              destinationFolder: '$(System.DefaultWorkingDirectory)'
-              cleanDestinationFolder: false
-            enabled: true
-          - task: FuncToolsInstaller@0
-            displayName: 'Install func tools - latest'
-            enabled: true
+#   jobs:
+#   - deployment: Deploy
+#     displayName: Deploy
+#     environment: 'development'
+#     pool:
+#       vmImage: $(vmImageName)
 
-          - script: 'func azure functionapp publish f-python-consumption --build remote --nozip'
-            workingDirectory: '$(System.DefaultWorkingDirectory)'
-            displayName: 'Command Line Script'
-            enabled: true
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - task: AzureCLI@2
+#             displayName: 'Azure CLI '
+#             inputs:
+#               azureSubscription: 'KevinLi-Internal(ed5ebdf4-3f16-4970-8666-b0b3803c727e)'
+#               scriptType: pscore
+#               scriptLocation: inlineScript
+#               inlineScript: 'az functionapp deployment source config-zip     -g AML -n  f-python-consumption --src $(Build.BuildId).zip --build-remote true  --verbose'
