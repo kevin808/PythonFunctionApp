@@ -65,12 +65,15 @@ stages:
     strategy:
       runOnce:
         deploy:
-
           steps:
-          - task: AzureFunctionApp@1
-            displayName: 'Azure functions app deploy'
+          - task: ExtractFiles@1
+            displayName: 'Extract files '
             inputs:
-              azureSubscription: '$(azureSubscription)'
-              appType: functionAppLinux
-              appName: $(functionAppName)
-              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              destinationFolder: '$(System.DefaultWorkingDirectory)'
+              cleanDestinationFolder: false
+            enabled: false
+
+          - script: 'func azure functionapp publish f-python-consumption --build remote --nozip'
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
+            displayName: 'Command Line Script'
+            enabled: false
