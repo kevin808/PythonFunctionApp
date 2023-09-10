@@ -71,9 +71,9 @@ stages:
             inputs:
               destinationFolder: '$(System.DefaultWorkingDirectory)'
               cleanDestinationFolder: false
-            enabled: false
+            enabled: true
 
           - script: 'func azure functionapp publish f-python-consumption --build remote --nozip'
             workingDirectory: '$(System.DefaultWorkingDirectory)'
             displayName: 'Command Line Script'
-            enabled: false
+            enabled: true
