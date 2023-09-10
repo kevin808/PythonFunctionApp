@@ -56,7 +56,7 @@ stages:
         azureSubscription: 'KevinLi-Internal(ed5ebdf4-3f16-4970-8666-b0b3803c727e)'
         scriptType: pscore
         scriptLocation: inlineScript
-        inlineScript: 'az functionapp deployment source config-zip     -g AML -n  f-consumption --src $(Build.BuildId).zip --build-remote true  --verbose'
+        inlineScript: 'az functionapp deployment source config-zip     -g AML -n  f-consumption --src $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip --build-remote true  --verbose'
 
 # - stage: Deploy
 #   displayName: Deploy stage
